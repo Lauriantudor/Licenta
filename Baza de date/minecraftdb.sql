@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 5.1.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 20, 2021 at 01:41 PM
--- Server version: 10.4.13-MariaDB
--- PHP Version: 7.4.8
+-- Generation Time: Mar 16, 2021 at 02:34 PM
+-- Server version: 10.4.18-MariaDB
+-- PHP Version: 8.0.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,18 +24,25 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `failed_jobs`
+-- Table structure for table `messages`
 --
 
-CREATE TABLE `failed_jobs` (
+CREATE TABLE `messages` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `uuid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `failed_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `from` int(10) UNSIGNED NOT NULL,
+  `to` int(10) UNSIGNED NOT NULL,
+  `text` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `messages`
+--
+
+INSERT INTO `messages` (`id`, `from`, `to`, `text`, `created_at`, `updated_at`) VALUES
+(1, 1, 2, 'cf?', NULL, NULL),
+(2, 2, 1, 'bn tu?', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -56,7 +63,7 @@ CREATE TABLE `migrations` (
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (1, '2014_10_12_000000_create_users_table', 1),
 (2, '2014_10_12_100000_create_password_resets_table', 1),
-(3, '2019_08_19_000000_create_failed_jobs_table', 1);
+(3, '2021_03_13_213011_create_messages_table', 1);
 
 -- --------------------------------------------------------
 
@@ -70,13 +77,6 @@ CREATE TABLE `password_resets` (
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `password_resets`
---
-
-INSERT INTO `password_resets` (`email`, `token`, `created_at`) VALUES
-('tudorel1997@yahoo.com', '$2y$10$PEjaW0BaNp2fwF2DedB1euw9ZGdkEJVraKlUb3pqieDx7ztK70vUm', '2021-01-18 09:35:26');
-
 -- --------------------------------------------------------
 
 --
@@ -86,8 +86,10 @@ INSERT INTO `password_resets` (`email`, `token`, `created_at`) VALUES
 CREATE TABLE `users` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
+  `profile_image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'http://via.placetolder.com/150x150',
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -98,21 +100,19 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Tudor Laurian', 'tudorel1997@yahoo.com', NULL, '$2y$10$cTBPnANIMG3A9FrrS.j8weGY0nFXiICAyKp9DUUkUUbVu.TCWyxIW', NULL, '2021-01-18 10:22:09', '2021-01-18 10:22:09'),
-(2, 'cart', 'test2@test.com', NULL, '$2y$10$B/tZ6DfOX9xCq3J03Q58x.lsWwPs3VswU2JQft8UIoYtQihjgN64a', NULL, '2021-01-18 10:26:57', '2021-01-18 10:26:57'),
-(3, 'sit', 'test@test.com', NULL, '$2y$10$hWcGF2.KqdOGvaFacY3x/eQx/i613FePFE9Ll1ZqSWkEXBecE6NEW', NULL, '2021-01-18 10:33:37', '2021-01-18 10:33:37');
+INSERT INTO `users` (`id`, `name`, `phone`, `email`, `email_verified_at`, `profile_image`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 'Tudor Laurian', NULL, 'tudorel1997@yahoo.com', NULL, 'https://eitrawmaterials.eu/wp-content/uploads/2016/09/person-icon.png', '$2y$10$n34VwbzAJTxZ6UGHPoZWw.aTMxnk.eCY4kcaXzy.6K0RnmSZlcex2', NULL, '2021-03-14 10:53:40', '2021-03-14 10:53:40'),
+(2, 'Test User', NULL, 'test@test.com', NULL, 'https://eitrawmaterials.eu/wp-content/uploads/2016/09/person-icon.png', '$2y$10$MijMSWNrr.hVQ2j1lDJJZO5IhV1TnnoJ5eWlyJ11kMppp.cBVlrva', NULL, '2021-03-14 12:13:19', '2021-03-14 12:13:19');
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `failed_jobs`
+-- Indexes for table `messages`
 --
-ALTER TABLE `failed_jobs`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`);
+ALTER TABLE `messages`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `migrations`
@@ -138,10 +138,10 @@ ALTER TABLE `users`
 --
 
 --
--- AUTO_INCREMENT for table `failed_jobs`
+-- AUTO_INCREMENT for table `messages`
 --
-ALTER TABLE `failed_jobs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `messages`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -153,7 +153,7 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
